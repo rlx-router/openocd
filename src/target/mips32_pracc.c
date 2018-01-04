@@ -318,7 +318,7 @@ inline void pracc_queue_init(struct pracc_queue_info *ctx)
 
 	//ctx->cp0_desave = 31;
 	//ctx->cp0_depc = 24;
-	//ctx->cp0_debug =
+	//ctx->cp0_debug = 23;
 }
 
 void pracc_add(struct pracc_queue_info *ctx, uint32_t addr, uint32_t instr)
