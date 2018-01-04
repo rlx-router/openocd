@@ -1,3 +1,14 @@
+Lexra User Guide 5.0:
+  (P109)
+  Debug Register (COP0 register 16): A register containing control
+  and status information such as the cause of the debug exception,
+  single-step enable and EJTAG reset
+  DEPC Register (COP0 register 17): The debug exception program
+  counter, containing the address to which the program returns after
+  executing the DERET instruction.
+  DESAVE register (COP0 register 18): A general purpose register for
+  the use of the debug exception handler.
+
 Welcome to OpenOCD!
 ===================
 
