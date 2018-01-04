@@ -960,7 +960,8 @@ int mips32_pracc_fastdata_xfer(struct mips_ejtag *ejtag_info, struct working_are
 		MIPS32_LUI(isa, 15, UPPER16(MIPS32_PRACC_TEXT)),
 		MIPS32_ORI(isa, 15, 15, LOWER16(MIPS32_PRACC_TEXT) | isa),	/* isa bit for JR instr */
 		MIPS32_JR(isa, 15),								/* jr start */
-		MIPS32_MFC0(isa, 15, ctx.cp0_desave, 0),					/* move COP0 DeSave to $15 */
+		//TODO: check core type
+		MIPS32_MFC0(isa, 15, 18, 0),					/* move COP0 DeSave to $15 */
 	};
 
 	if (source->size < MIPS32_FASTDATA_HANDLER_SIZE)
