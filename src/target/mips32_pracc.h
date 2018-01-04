@@ -60,6 +60,10 @@ struct pracc_queue_info {
 	int store_count;
 	int max_code;		/* max intstructions with currently allocated memory */
 	pa_list *pracc_list;	/* Code and store addresses at dmseg */
+
+	int cp0_desave;
+	int cp0_depc;
+	int cp0_debug;
 };
 
 void pracc_queue_init(struct pracc_queue_info *ctx);

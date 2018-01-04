@@ -310,6 +310,15 @@ inline void pracc_queue_init(struct pracc_queue_info *ctx)
 	ctx->max_code = 0;
 	ctx->pracc_list = NULL;
 	ctx->isa = ctx->ejtag_info->isa ? 1 : 0;
+
+	//TODO: Check core type
+	ctx->cp0_desave = 18;
+	ctx->cp0_depc = 17;
+	ctx->cp0_debug = 16;
+
+	//ctx->cp0_desave = 31;
+	//ctx->cp0_depc = 24;
+	//ctx->cp0_debug =
 }
 
 void pracc_add(struct pracc_queue_info *ctx, uint32_t addr, uint32_t instr)
@@ -518,7 +527,7 @@ int mips32_pracc_read_mem(struct mips_ejtag *ejtag_info, uint32_t addr, int size
 				pracc_add(&ctx, 0, MIPS32_LHU(ctx.isa, 8, LOWER16(addr), 9));
 			else
 				pracc_add(&ctx, 0, MIPS32_LBU(ctx.isa, 8, LOWER16(addr), 9));
-				
+
 			pracc_add(&ctx, 0, MIPS32_NOP); /* delay for pipeline */
 
 			pracc_add(&ctx, MIPS32_PRACC_PARAM_OUT + i * 4,			/* store $8 at param out */
@@ -848,7 +857,7 @@ int mips32_pracc_write_regs(struct mips_ejtag *ejtag_info, uint32_t *regs)
 		MIPS32_MTHI(ctx.isa, 1),						/* move $1 to hi */
 		MIPS32_MTC0(ctx.isa, 1, 8, 0),					/* move $1 to badvaddr */
 		MIPS32_MTC0(ctx.isa, 1, 13, 0),					/* move $1 to cause*/
-		MIPS32_MTC0(ctx.isa, 1, 24, 0),					/* move $1 to depc (pc) */
+		MIPS32_MTC0(ctx.isa, 1, ctx.cp0_depc, 0),					/* move $1 to depc (pc) */
 	};
 
 	/* load registers 2 to 31 with li32, optimize */
@@ -883,7 +892,7 @@ int mips32_pracc_read_regs(struct mips_ejtag *ejtag_info, uint32_t *regs)
 		MIPS32_MFHI(ctx.isa, 8),						/* move hi to $8 */
 		MIPS32_MFC0(ctx.isa, 8, 8, 0),					/* move badvaddr to $8 */
 		MIPS32_MFC0(ctx.isa, 8, 13, 0),					/* move cause to $8 */
-		MIPS32_MFC0(ctx.isa, 8, 24, 0),					/* move depc (pc) to $8 */
+		MIPS32_MFC0(ctx.isa, 8, ctx.cp0_depc, 0),					/* move depc (pc) to $8 */
 	};
 
 	pracc_add(&ctx, 0, MIPS32_MTC0(ctx.isa, 1, 31, 0));				/* move $1 to COP0 DeSave */
