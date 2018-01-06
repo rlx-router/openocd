@@ -1183,6 +1183,8 @@ static int mips_m4k_examine(struct target *target)
 			LOG_ERROR("idcode read failed");
 			return retval;
 		}
+		//TODO: use this as lexra id ? 
+		LOG_DEBUG("IDCODE: %X", ejtag_info->idcode);
 		if (((ejtag_info->idcode >> 1) & 0x7FF) == 0x29) {
 			/* we are using a pic32mx so select ejtag port
 			 * as it is not selected by default */
