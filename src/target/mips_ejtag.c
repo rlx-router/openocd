@@ -384,13 +384,6 @@ int mips_ejtag_init(struct mips_ejtag *ejtag_info)
 
 	mips_ejtag_init_mmr(ejtag_info);
 
-	uint32_t cp0_prid;
-	mips32_cp0_read(ejtag_info, &cp0_prid, 15, 0);
-
-	LOG_DEBUG("PrID: %08X", cp0_prid);
-
-	ejtag_info->prid = cp0_prid;
-
 	return ERROR_OK;
 }
 

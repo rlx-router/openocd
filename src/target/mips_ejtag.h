@@ -178,7 +178,7 @@
 #define EJTAG_VERSION_51		5
 
 //FIXME: other id
-#define PRID_IS_LEXRA(prid) ((prid)&0xff00) == 0xcd00
+#define IDCODE_IS_LEXRA(i) ((i)&0xffe) == 0xc
 
 struct mips_ejtag {
 	struct jtag_tap *tap;
@@ -198,8 +198,6 @@ struct mips_ejtag {
 	unsigned int ejtag_version;
 	uint32_t isa;
 	uint32_t endianness;
-
-	uint32_t prid;
 
 	/* Memory-Mapped Registers. This addresses are not same on different
 	 * EJTAG versions. */

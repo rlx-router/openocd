@@ -311,7 +311,7 @@ inline void pracc_queue_init(struct pracc_queue_info *ctx)
 	ctx->pracc_list = NULL;
 	ctx->isa = ctx->ejtag_info->isa ? 1 : 0;
 
-  if(PRID_IS_LEXRA(ctx->ejtag_info->prid)) {
+  if(IDCODE_IS_LEXRA(ctx->ejtag_info->idcode)) {
 		ctx->cp0_desave = 18;
 		ctx->cp0_depc = 17;
 		ctx->cp0_debug = 16;
@@ -961,7 +961,7 @@ int mips32_pracc_fastdata_xfer(struct mips_ejtag *ejtag_info, struct working_are
 		MIPS32_LUI(isa, 15, UPPER16(MIPS32_PRACC_TEXT)),
 		MIPS32_ORI(isa, 15, 15, LOWER16(MIPS32_PRACC_TEXT) | isa),	/* isa bit for JR instr */
 		MIPS32_JR(isa, 15),								/* jr start */
-		PRID_IS_LEXRA(ejtag_info->prid) ?
+		IDCODE_IS_LEXRA(ejtag_info->idcode) ?
 			MIPS32_MFC0(isa, 15, 18, 0)					/* move COP0 DeSave to $15 */
 		: MIPS32_MFC0(isa, 15, 31, 0),
 	};
