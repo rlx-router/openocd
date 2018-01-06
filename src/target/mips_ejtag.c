@@ -340,6 +340,7 @@ int mips_ejtag_init(struct mips_ejtag *ejtag_info)
 		return retval;
 	}
 
+	LOG_DEBUG("EJTAG impcode: %X\n", ejtag_info->impcode);
 	/* get ejtag version */
 	ejtag_info->ejtag_version = ((ejtag_info->impcode >> 29) & 0x07);
 
@@ -382,6 +383,13 @@ int mips_ejtag_init(struct mips_ejtag *ejtag_info)
 	ejtag_info->fast_access_save = -1;
 
 	mips_ejtag_init_mmr(ejtag_info);
+
+	uint32_t cp0_prid;
+	mips32_cp0_read(ejtag_info, &cp0_prid, 15, 0);
+
+	LOG_DEBUG("PrID: %08X", cp0_prid);
+
+	ejtag_info->prid = cp0_prid;
 
 	return ERROR_OK;
 }

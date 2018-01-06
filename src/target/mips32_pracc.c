@@ -311,14 +311,15 @@ inline void pracc_queue_init(struct pracc_queue_info *ctx)
 	ctx->pracc_list = NULL;
 	ctx->isa = ctx->ejtag_info->isa ? 1 : 0;
 
-	//TODO: Check core type
-	ctx->cp0_desave = 18;
-	ctx->cp0_depc = 17;
-	ctx->cp0_debug = 16;
-
-	//ctx->cp0_desave = 31;
-	//ctx->cp0_depc = 24;
-	//ctx->cp0_debug = 23;
+  if(PRID_IS_LEXRA(ctx->ejtag_info->prid)) {
+		ctx->cp0_desave = 18;
+		ctx->cp0_depc = 17;
+		ctx->cp0_debug = 16;
+	} else {
+		ctx->cp0_desave = 31;
+		ctx->cp0_depc = 24;
+		ctx->cp0_debug = 23;
+	}
 }
 
 void pracc_add(struct pracc_queue_info *ctx, uint32_t addr, uint32_t instr)
@@ -960,8 +961,9 @@ int mips32_pracc_fastdata_xfer(struct mips_ejtag *ejtag_info, struct working_are
 		MIPS32_LUI(isa, 15, UPPER16(MIPS32_PRACC_TEXT)),
 		MIPS32_ORI(isa, 15, 15, LOWER16(MIPS32_PRACC_TEXT) | isa),	/* isa bit for JR instr */
 		MIPS32_JR(isa, 15),								/* jr start */
-		//TODO: check core type
-		MIPS32_MFC0(isa, 15, 18, 0),					/* move COP0 DeSave to $15 */
+		PRID_IS_LEXRA(ejtag_info->prid) ?
+			MIPS32_MFC0(isa, 15, 18, 0)					/* move COP0 DeSave to $15 */
+		: MIPS32_MFC0(isa, 15, 31, 0),
 	};
 
 	if (source->size < MIPS32_FASTDATA_HANDLER_SIZE)
