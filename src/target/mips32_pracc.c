@@ -905,10 +905,12 @@ int mips32_pracc_read_regs(struct mips_ejtag *ejtag_info, uint32_t *regs)
 
 	for (int i = 0; i != 6; i++) {
 		pracc_add(&ctx, 0, cp0_read_code[i]);				/* load COP0 needed registers to $8 */
+		pracc_add(&ctx, 0, MIPS32_NOP);
 		pracc_add(&ctx, MIPS32_PRACC_PARAM_OUT + (i + 32) * 4,			/* store $8 at PARAM OUT */
 				  MIPS32_SW(ctx.isa, 8, PRACC_OUT_OFFSET + (i + 32) * 4, 1));
 	}
 	pracc_add(&ctx, 0, MIPS32_MFC0(ctx.isa, 8, ctx.cp0_desave, 0));			/* move DeSave to $8, reg1 value */
+	pracc_add(&ctx, 0, MIPS32_NOP);
 	pracc_add(&ctx, MIPS32_PRACC_PARAM_OUT + 4,			/* store reg1 value from $8 to param out */
 			  MIPS32_SW(ctx.isa, 8, PRACC_OUT_OFFSET + 4, 1));
 
