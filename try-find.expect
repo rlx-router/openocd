@@ -1,0 +1,11 @@
+#! /bin/env expect
+
+spawn telnet localhost 4444
+
+for {set i 0xff30000C} {$i < 0xff3f0000} {incr i 4} {
+	expect ">"
+	send [format "mww 0x%08x 0xffffffff\n" $i]
+	#expect ">"
+	#send [format "mdw 0x%08x 1\n" $i]
+	#expect [format "0x%08x: ade82000" $i]
+}
