@@ -471,6 +471,7 @@ int mips32_pracc_read_u32(struct mips_ejtag *ejtag_info, uint32_t addr, uint32_t
 
 	pracc_add(&ctx, 0, MIPS32_LUI(ctx.isa, 15, PRACC_UPPER_BASE_ADDR));	/* $15 = MIPS32_PRACC_BASE_ADDR */
 	pracc_add(&ctx, 0, MIPS32_LUI(ctx.isa, 8, UPPER16((addr + 0x8000)))); /* load  $8 with modified upper addr */
+	pracc_add(&ctx, 0, MIPS32_NOP); /* delay for pipeline */
 	pracc_add(&ctx, 0, MIPS32_LW(ctx.isa, 8, LOWER16(addr), 8));			/* lw $8, LOWER16(addr)($8) */
 	pracc_add(&ctx, 0, MIPS32_NOP); /* delay for pipeline */
 	pracc_add(&ctx, MIPS32_PRACC_PARAM_OUT,
